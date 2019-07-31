@@ -18,13 +18,19 @@ export default class Demo3 extends React.Component {
             }
         };
     }
-    onSubmit(e) {
+    async onSubmit(e) {
         e.preventDefault();
+        await $get("321", { name: 123 }).then(e => {
+            console.log(e)
+        })
     }
 
-    onChange(key, value) {
+    async onChange(key, value) {
         this.state.form[key] = value;
         this.forceUpdate();
+        await $post("123", { name: 123 }).then(e => {
+            console.log(e)
+        })
     }
     render() {
         return (
