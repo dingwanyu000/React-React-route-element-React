@@ -1,6 +1,6 @@
 import React from 'react'
 // import 'element-theme-default'
-import { Row, Col, Form, Icon, Input, Button, Card, Checkbox } from 'antd'
+import { Row, Col, Form, Icon, Input, Button, Card } from 'antd'
 import Background from './../static/img/Background.png';
 import _ from 'lodash';
 

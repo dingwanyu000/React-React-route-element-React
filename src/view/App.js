@@ -1,11 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Layout, Menu, Breadcrumb, Button } from 'element-react'
+import { Row, Col, Menu } from 'antd'
 import Demo1 from './Demo1';
 import Demo2 from './Demo2';
 import Demo3 from './Demo3';
 import { post, get } from './../api/Api'
 import 'element-theme-default'
+const { SubMenu } = Menu;
 
 window.$post = post
 window.$get = get
@@ -16,14 +17,8 @@ export default class App extends React.Component {
             username: ''
         };
     }
-    onSelect() {
-    }
-    onOpen() {
-    }
-    onClose() {
-    }
     menuSelect(e) {
-        this.props.history.push('/home/' + e)
+        this.props.history.push('/home/' + e.key)
     }
     cancel(e) {
         this.props.history.push('/')
@@ -34,8 +29,8 @@ export default class App extends React.Component {
     render() {
         return (
             <div>
-                <Layout.Row>
-                    <Layout.Col span="24">
+                <Row>
+                    <Col span={24}>
                         <div style={{ backgroundColor: "#324157", height: "60px", color: "white" }}>
                             <div style={{ padding: "20px" }}><span>myFirstReactGo</span>
                                 <div style={{ float: "right" }}>
@@ -44,38 +39,30 @@ export default class App extends React.Component {
                                 </div>
                             </div>
                         </div>
-                    </Layout.Col>
-                </Layout.Row>
-                <Layout.Row>
-                    <Layout.Col span="3">
-                        <Menu ref="menu" defaultActive="Demo1" style={{ height: window.window.innerHeight - 60 }} defaultActive="2" className="el-menu-vertical-demo" onSelect={this.menuSelect.bind(this)} onOpen={this.onOpen.bind(this)} onClose={this.onClose.bind(this)}>
-                            <Menu.SubMenu index="1" title={<span><i className="el-icon-message"></i>用户管理</span>}>
-                                <Menu.Item index="Demo1">用户信息管理</Menu.Item>
-                                <Menu.Item index="Demo2">Demo2</Menu.Item>
-                                <Menu.Item index="Demo3">Demo3</Menu.Item>
-                            </Menu.SubMenu>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={3}>
+                        <Menu mode="inline" ref="menu" style={{ height: window.window.innerHeight - 60 }} className="el-menu-vertical-demo" onClick={this.menuSelect.bind(this)}>
+                            <SubMenu key="1" title={<span><i className="el-icon-message"></i>用户管理</span>}>
+                                <Menu.Item key="Demo1">用户信息管理</Menu.Item>
+                                <Menu.Item key="Demo2">Demo2</Menu.Item>
+                                <Menu.Item key="Demo3">Demo3</Menu.Item>
+                            </SubMenu>
                         </Menu>
-                    </Layout.Col>
-                    <Layout.Col span="21" style={{ backgroundColor: "#F9FAFC", height: window.window.innerHeight - 60 }}>
-                        <Layout.Row>
-                            <Breadcrumb style={{ margin: 10 }} separator="/">
-                                <Breadcrumb.Item>首页</Breadcrumb.Item>
-                                <Breadcrumb.Item>活动管理</Breadcrumb.Item>
-                                <Breadcrumb.Item>活动列表</Breadcrumb.Item>
-                                <Breadcrumb.Item>活动详情</Breadcrumb.Item>
-                            </Breadcrumb>
-                        </Layout.Row>
+                    </Col>
+                    <Col span={21} style={{ backgroundColor: "#F9FAFC", height: window.window.innerHeight - 60 }}>
                         <div style={{ margin: "30px" }}>
-                            <Layout.Row>
+                            <Row>
                                 <Switch>
                                     <Route path="/home/Demo1" component={Demo1} />
                                     <Route path="/home/Demo2" component={Demo2} />
                                     <Route path="/home/Demo3" component={Demo3} />
                                 </Switch>
-                            </Layout.Row>
+                            </Row>
                         </div>
-                    </Layout.Col>
-                </Layout.Row>
+                    </Col>
+                </Row>
             </div >
         )
     }
