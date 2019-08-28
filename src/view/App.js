@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Row, Col, Menu } from 'antd'
+import { Row, Col, Menu, Icon } from 'antd'
 import Demo1 from './Demo1';
 import Demo2 from './Demo2';
 import Demo3 from './Demo3';
@@ -35,7 +35,7 @@ export default class App extends React.Component {
                             <div style={{ padding: "20px" }}><span>myFirstReactGo</span>
                                 <div style={{ float: "right" }}>
                                     <span>你好，{this.state.username}&nbsp;&nbsp;|&nbsp;&nbsp;欢迎回来&nbsp;&nbsp;</span>
-                                    <i onClick={this.cancel.bind(this)} className="el-icon-circle-cross" style={{ cursor: "pointer" }}></i>
+                                    <i onClick={this.cancel.bind(this)}><Icon type="poweroff" onClick={this.cancel.bind(this)} /></i>
                                 </div>
                             </div>
                         </div>
