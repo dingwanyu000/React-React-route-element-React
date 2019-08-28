@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// axios.defauls.baseURL = "locahost:8080";
+// axios.defauls.baseURL = "http://locahost:8081";
 //请求超时时间
 //axios.defaults.timeout = 10000;
 // axios拦截器

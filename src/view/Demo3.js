@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Input, Layout, Form, Select, DatePicker, TimePicker, Switch, Checkbox, Radio } from 'element-react'
+import { Input, Layout, Form, Select, DatePicker, TimePicker, Switch, Checkbox, Radio, Button } from 'element-react'
 import 'element-theme-default'
 
 export default class Demo3 extends React.Component {
@@ -7,7 +7,7 @@ export default class Demo3 extends React.Component {
         super(props);
         this.state = {
             form: {
-                name: '',
+                name: '123',
                 region: '',
                 date1: null,
                 date2: null,
@@ -20,7 +20,11 @@ export default class Demo3 extends React.Component {
     }
     async onSubmit(e) {
         e.preventDefault();
-        await $get("321", { name: 123 }).then(e => {
+        await $get("/api/persons", { name: 123 }).then(e => {
+            this.state.form.name = e.persons[0].last_name
+            this.setState(
+                this.state.form
+            )
             console.log(e)
         })
     }
@@ -28,13 +32,14 @@ export default class Demo3 extends React.Component {
     async onChange(key, value) {
         this.state.form[key] = value;
         this.forceUpdate();
-        await $post("123", { name: 123 }).then(e => {
+        await $post("/api/persons", { name: 123 }).then(e => {
             console.log(e)
         })
     }
     render() {
         return (
             <div>
+                <button className={"el-button el-button--primary"}>123</button>
                 <Form model={this.state.form} labelWidth="80" onSubmit={this.onSubmit.bind(this)}>
                     <Form.Item label="活动名称">
                         <Input value={this.state.form.name} onChange={this.onChange.bind(this, 'name')}></Input>
