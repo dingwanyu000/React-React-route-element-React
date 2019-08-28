@@ -1,91 +1,84 @@
 import React from 'react'
-import 'element-theme-default'
-import { Input, Layout, Form, Card, Button, Message } from 'element-react'
+// import 'element-theme-default'
+import { Row, Col, Form, Icon, Input, Button, Card, Checkbox } from 'antd'
 import Background from './../static/img/Background.png';
 import _ from 'lodash';
 
-export default class Login extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            form: {
-                username: '',
-                password: '',
-            },
-            rules: {
-                username: [
-                    { required: true, message: '请输入用户名', trigger: 'blur' }
-                ],
-                password: [
-                    { required: true, message: '请输入密码', trigger: 'change' }
-                ],
-            }
-        };
+function hasErrors(fieldsError) {
+    return Object.keys(fieldsError).some(field => fieldsError[field]);
+}
+
+class Login extends React.Component {
+    constructor(props, context) {
+        super(props, context);
     }
 
-    render() {
-        return (
-            <div>
-                <Layout.Row style={{ backgroundImage: `url(${Background})`, height: window.innerHeight + "px", backgroundSize: "100%" }}>
-                    <Layout.Col span="14" style={{ height: "150px" }}></Layout.Col>
-                    <Layout.Col span="6"> <Card className="box-card" style={{
-                        marginTop: "200px"
-                    }}>
-                        < div style={{ textAlign: "center", marginBottom: "20px", fontWeight: "bold" }}>邮箱账号登录</div>
-                        <Form ref="form" rules={this.state.rules} model={this.state.form} labelWidth="0" onSubmit={this.onSubmit.bind(this)} style={{ textAlign: "center" }}>
-                            <Form.Item prop="username" label="">
-                                <Input
-                                    style={{ width: "80%" }}
-                                    value={this.state.form.username}
-                                    onChange={this.onChange.bind(this, 'username')}
-                                    placeholder="请输入用户名"
-                                />
-                            </Form.Item>
-                            <Form.Item prop="password" label="">
-                                <Input
-                                    style={{ width: "80%" }}
-                                    value={this.state.form.password}
-                                    onChange={this.onChange.bind(this, 'password')}
-                                    placeholder="请输入密码"
-                                />
-                            </Form.Item>
-                            <Form.Item>
-                                <Button style={{ width: "80%" }} type="primary" nativeType="submit">立即创建</Button>
-                            </Form.Item>
-                            <Form.Item>
-                                <Button type="text">注册新账号</Button>
-                            </Form.Item>
-
-                        </Form>
-                    </Card></Layout.Col>
-                    <Layout.Col span="4"></Layout.Col>
-                </Layout.Row >
-            </div >
-        );
-    }
-
-    onSubmit(e) {
-        e.preventDefault();
-        this.refs.form.validate(async (valid) => {
-            if (valid) {
-                await $post("/api/login", { username: this.state.form.username, password: this.state.form.password }).then(e => {
+    login(e) {
+        let userInfo = this.props.form.getFieldsValue();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                $post("/api/login", userInfo).then(e => {
                     if (e.state) {
-                        window.sessionStorage.setItem("userInfo", JSON.stringify({ username: this.state.form.username, password: this.state.form.password }))
+                        window.sessionStorage.setItem("userInfo", JSON.stringify({ username: userInfo.username, password: userInfo.password }))
                         this.props.history.push('/home')
                         Message({ message: '登录成功', type: 'success' });
                     } else {
                         Message.error('登录失败！请联系管理员');
                     }
                 })
-            } else {
-                return false;
             }
-        });
+        })
     }
 
-    onChange(key, value) {
-        this.setState({
-            form: Object.assign({}, this.state.form, { [key]: value })
-        });
+    componentDidMount() {
+        this.props.form.validateFields();
     }
+
+    render() {
+        const { getFieldDecorator } = this.props.form;
+        return (
+            <div>
+                <Row style={{ backgroundImage: `url(${Background})`, height: window.innerHeight + "px", backgroundSize: "100%" }}>
+                    <Col span={14} style={{ height: "150px" }}></Col >
+                    <Col span={6}> <Card className="box-card" style={{
+                        marginTop: "200px"
+                    }}>
+                        < div style={{ textAlign: "center", marginBottom: "20px", fontWeight: "bold" }}>邮箱账号登录</div>
+                        <Form className="login-form">
+                            <Form.Item>
+                                {getFieldDecorator('username', {
+                                    rules: [{ required: true, message: 'Please input your username!' }],
+                                })(
+                                    <Input
+                                        prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                        placeholder="Username"
+                                    />,
+                                )}
+                            </Form.Item>
+                            <Form.Item>
+                                {getFieldDecorator('password', {
+                                    rules: [{ required: true, message: 'Please input your Password!' }],
+                                })(
+                                    <Input
+                                        prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                        type="password"
+                                        placeholder="Password"
+                                    />,
+                                )}
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" onClick={this.login.bind(this)} className="login-form-button">
+                                    立即登录
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </Card></Col >
+                    <Col span={4}></Col >
+                </Row>
+            </div >
+        );
+    }
+
 }
+
+export default Form.create()(Login);
