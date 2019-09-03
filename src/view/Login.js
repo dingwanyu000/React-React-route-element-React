@@ -1,6 +1,6 @@
 import React from 'react'
 // import 'element-theme-default'
-import { Row, Col, Form, Icon, Input, Button, Card } from 'antd'
+import { Row, Col, Form, Icon, Input, Button, Card, Message } from 'antd'
 import Background from './../static/img/Background.png';
 import _ from 'lodash';
 
@@ -21,7 +21,7 @@ class Login extends React.Component {
                     if (e.state) {
                         window.sessionStorage.setItem("userInfo", JSON.stringify({ username: userInfo.username, password: userInfo.password }))
                         this.props.history.push('/home')
-                        Message({ message: '登录成功', type: 'success' });
+                        Message.success('登录成功');
                     } else {
                         Message.error('登录失败！请联系管理员');
                     }

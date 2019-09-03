@@ -1,108 +1,100 @@
 import React from 'react'
-import { Input, Layout, Form, Select, DatePicker, TimePicker, Switch, Checkbox, Radio, Button } from 'element-react'
-import 'element-theme-default'
+import { Icon, Card, Row, Col } from 'antd';
+import echarts from "echarts";
+import '../../node_modules/echarts/map/js/world.js'
 
 export default class Demo3 extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            form: {
-                name: '123',
-                region: '',
-                date1: null,
-                date2: null,
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
+            liStyle: {
+                fontSize: "18px",
+                listStyleType: "none",
+                fontWeight: "bold"
+            },
+            firstLiStyle: {
+                fontSize: "18px",
+                listStyleType: "none",
+                fontWeight: "bold"
             }
         };
     }
-    async onSubmit(e) {
-        e.preventDefault();
-        await $get("/api/persons", { name: 123 }).then(e => {
-            this.state.form.name = e.persons[0].last_name
-            this.setState(
-                this.state.form
-            )
-            console.log(e)
-        })
+    /**
+         * 生命周期
+         * @author dwy
+         */
+    componentDidMount() {
+        this.initChart();
     }
 
-    async onChange(key, value) {
-        this.state.form[key] = value;
-        this.forceUpdate();
-        await $post("/api/persons", { name: 123 }).then(e => {
-            console.log(e)
-        })
+    initChart() {
+        this.chart = echarts.init(this.refs.myEchart);
+        window.onresize = echarts.init(this.refs.myEchart).resize;
+        // 把配置和数据放这里
+        this.chart.setOption({
+            title: {
+                sublink: 'http://esa.un.org/wpp/Excel-Data/population.htm',
+                left: 'center',
+                top: 'top'
+            },
+            visualMap: {
+                min: 0,
+                max: 1000000,
+                text: ['High', 'Low'],
+                realtime: false,
+                calculable: true,
+                color: ['orangered', 'yellow', 'lightskyblue']
+            },
+            series: [
+                {
+                    name: 'World Population (2010)',
+                    type: 'map',
+                    mapType: 'world',
+                    roam: true,
+                    itemStyle: {
+                        emphasis: { label: { show: true } }
+                    },
+                    data: [
+                        { name: 'Afghanistan', value: 228397.812 },
+                        { name: 'Angola', value: 19549.124 },
+                        { name: 'China', value: 129549.124 }
+                    ]
+                }
+            ]
+        });
     }
     render() {
         return (
             <div>
-                <button className={"el-button el-button--primary"}>123</button>
-                <Form model={this.state.form} labelWidth="80" onSubmit={this.onSubmit.bind(this)}>
-                    <Form.Item label="活动名称">
-                        <Input value={this.state.form.name} onChange={this.onChange.bind(this, 'name')}></Input>
-                    </Form.Item>
-                    <Form.Item label="活动区域">
-                        <Select value={this.state.form.region} placeholder="请选择活动区域">
-                            <Select.Option label="区域一" value="shanghai"></Select.Option>
-                            <Select.Option label="区域二" value="beijing"></Select.Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item label="活动时间">
-                        <Layout.Col span="11">
-                            <Form.Item prop="date1" labelWidth="0px">
-                                <DatePicker
-                                    value={this.state.form.date1}
-                                    placeholder="选择日期"
-                                    onChange={this.onChange.bind(this, 'date1')}
-                                />
-                            </Form.Item>
-                        </Layout.Col>
-                        <Layout.Col className="line" span="2">-</Layout.Col>
-                        <Layout.Col span="11">
-                            <Form.Item prop="date2" labelWidth="0px">
-                                <TimePicker
-                                    value={this.state.form.date2}
-                                    selectableRange="18:30:00 - 20:30:00"
-                                    placeholder="选择时间"
-                                    onChange={this.onChange.bind(this, 'date2')}
-                                />
-                            </Form.Item>
-                        </Layout.Col>
-                    </Form.Item>
-                    <Form.Item label="即时配送">
-                        <Switch
-                            onText=""
-                            offText=""
-                            value={this.state.form.delivery}
-                            onChange={this.onChange.bind(this, 'delivery')}
-                        />
-                    </Form.Item>
-                    <Form.Item label="活动性质">
-                        <Checkbox.Group value={this.state.form.type} onChange={this.onChange.bind(this, 'type')}>
-                            <Checkbox label="美食/餐厅线上活动" name="type"></Checkbox>
-                            <Checkbox label="地推活动" name="type"></Checkbox>
-                            <Checkbox label="线下主题活动" name="type"></Checkbox>
-                            <Checkbox label="单纯品牌曝光" name="type"></Checkbox>
-                        </Checkbox.Group>
-                    </Form.Item>
-                    <Form.Item label="特殊资源">
-                        <Radio.Group value={this.state.form.resource}>
-                            <Radio value="线上品牌商赞助"></Radio>
-                            <Radio value="线下场地免费"></Radio>
-                        </Radio.Group>
-                    </Form.Item>
-                    <Form.Item label="活动形式">
-                        <Input type="textarea" value={this.state.form.desc} onChange={this.onChange.bind(this, 'desc')}></Input>
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type="primary" nativeType="submit">立即创建</Button>
-                        <Button>取消</Button>
-                    </Form.Item>
-                </Form>
-            </div >
+                <Row gutter={10}>
+                    <Col span={8}><Card className="box-card">
+                        <Icon type="credit-card" theme="twoTone" style={{ fontSize: '70px', float: "left" }} />
+                        <ul style={{ float: "left", marginTop: "10px" }}>
+                            <li style={this.state.firstLiStyle}>待办事项</li>
+                            <li style={this.state.liStyle}>12</li>
+                        </ul>
+                    </Card></Col>
+                    <Col span={8}><Card className="box-card">
+                        <Icon type="mail" theme="twoTone" style={{ fontSize: '70px', float: "left" }} />
+                        <ul style={{ float: "left", marginTop: "10px" }}>
+                            <li style={this.state.firstLiStyle}>系统消息</li>
+                            <li style={this.state.liStyle}>8</li>
+                        </ul>
+                    </Card></Col>
+                    <Col span={8}><Card className="box-card">
+                        <Icon type="folder" theme="twoTone" style={{ fontSize: '70px', float: "left" }} />
+                        <ul style={{ float: "left", marginTop: "10px" }}>
+                            <li style={this.state.firstLiStyle}>代码量</li>
+                            <li style={this.state.liStyle}>5218</li>
+                        </ul>
+                    </Card></Col>
+                </Row>
+                <Row style={{ marginTop: "10px" }}>
+                    <Card className="box-card">
+                        <div ref="myEchart" style={{ height: "470px" }}></div>
+                    </Card>
+                </Row>
+            </div>
         );
     }
 }

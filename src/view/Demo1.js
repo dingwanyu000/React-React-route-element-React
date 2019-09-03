@@ -1,6 +1,7 @@
 import React from 'react';
 import { MessageBox } from 'element-react'
 import { Table, Tag, Button, Modal, Form, Input, Icon, Card, message } from 'antd';
+import { apiCenter } from "./../api/Apis"
 
 class Demo1 extends React.Component {
     constructor(props, context) {
@@ -44,99 +45,12 @@ class Demo1 extends React.Component {
         }
     }
 
-    render() {
-        /**
-         * 初始化form getFieldDecorator方法
-         * @author dwy
-         */
-        const { getFieldDecorator } = this.props.form;
-        /**
-         * 初始化列表选中方法
-         * @author dwy
-         */
-        const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-                this.setState({ selection: selectedRows })
-            },
-        }
-        /**
-         * 初始化分页参数
-         * @author dwy
-         */
-        const paginationProps = {
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: () => `共${this.state.page.total}条`,
-            pageSize: this.state.page.pageSize,
-            // current: page.pageNum,
-            total: this.state.page.total,
-            onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
-            onChange: (current) => this.changePage(current),
-        };
-        return (
-            <div>
-                <Card className="box-card">
-                    <div style={{ marginBottom: "10px" }}>
-                        <Button style={{ marginLeft: "5px" }} type="primary" onClick={this.createUser.bind(this)}>新增</Button>
-                        <Button style={{ marginLeft: "5px" }} type="primary" onClick={this.updateUser.bind(this)}>修改</Button>
-                        <Button style={{ marginLeft: "5px" }} type="danger" onClick={this.deleteUser.bind(this)}>删除</Button>
-                    </div>
-                    <Table
-                        rowKey={record => record.id}
-                        style={{ width: '100%' }}
-                        columns={this.state.columns}
-                        maxHeight={200}
-                        dataSource={this.state.data}
-                        rowSelection={rowSelection}
-                        pagination={paginationProps}
-                    />
-                </Card>
-                {/* </Card> */}
-                <Modal
-                    title="新增用户"
-                    visible={this.state.dialogVisible}
-                    onOk={this.saveData.bind(this)}
-                    onCancel={() => this.setState({ dialogVisible: false })}
-                >
-                    <Form ref="form" className="login-form">
-                        <Form.Item style={{ display: "none" }}>
-                            {getFieldDecorator('id', { initialValue: this.state.form.id }, {
-                                rules: [{ required: true, message: 'Please input your username!' }],
-                            })}
-                        </Form.Item>
-                        <Form.Item>
-                            {getFieldDecorator('username', { initialValue: this.state.form.username }, {
-                                rules: [{ required: true, message: 'Please input your username!' }],
-                            })(
-                                <Input
-                                    prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                    placeholder="Username"
-                                />,
-                            )}
-                        </Form.Item>
-                        <Form.Item>
-                            {getFieldDecorator('password', { initialValue: this.state.form.password }, {
-                                rules: [{ required: true, message: 'Please input your Password!' }],
-                            })(
-                                <Input
-                                    prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                    placeholder="Password"
-                                />,
-                            )}
-                        </Form.Item>
-                    </Form>
-                </Modal>
-            </div>
-        )
-    }
-
     /**
      * 生命周期
      * @author dwy
      */
     componentDidMount() {
-        $get("/api/persons").then(e => {
-            // this.setState({ data: e.persons, page: { total: e.persons.length } })
+        $get(apiCenter.personList).then(e => {
             this.setState({ data: e.persons, page: { total: e.persons.length, pageSize: 2 } })
         })
         this.props.form.validateFields();
@@ -229,6 +143,94 @@ class Demo1 extends React.Component {
     changePageSize() {
 
     }
+
+    render() {
+        /**
+         * 初始化form getFieldDecorator方法
+         * @author dwy
+         */
+        const { getFieldDecorator } = this.props.form;
+        /**
+         * 初始化列表选中方法
+         * @author dwy
+         */
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+                this.setState({ selection: selectedRows })
+            },
+        }
+
+        /**
+         * 初始化分页参数
+         * @author dwy
+         */
+        const paginationProps = {
+            showSizeChanger: true,
+            showQuickJumper: true,
+            showTotal: () => `共${this.state.page.total}条`,
+            pageSize: this.state.page.pageSize,
+            // current: page.pageNum,
+            total: this.state.page.total,
+            onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
+            onChange: (current) => this.changePage(current),
+        };
+        return (
+            <div>
+                <Card className="box-card">
+                    <div style={{ marginBottom: "10px" }}>
+                        <Button style={{ marginLeft: "5px" }} type="primary" onClick={this.createUser.bind(this)}>新增</Button>
+                        <Button style={{ marginLeft: "5px" }} type="primary" onClick={this.updateUser.bind(this)}>修改</Button>
+                        <Button style={{ marginLeft: "5px" }} type="danger" onClick={this.deleteUser.bind(this)}>删除</Button>
+                    </div>
+                    <Table
+                        rowKey={record => record.id}
+                        style={{ width: '100%' }}
+                        columns={this.state.columns}
+                        maxHeight={200}
+                        dataSource={this.state.data}
+                        rowSelection={rowSelection}
+                        pagination={paginationProps}
+                    />
+                </Card>
+                {/* </Card> */}
+                <Modal
+                    title="新增用户"
+                    visible={this.state.dialogVisible}
+                    onOk={this.saveData.bind(this)}
+                    onCancel={() => this.setState({ dialogVisible: false })}
+                >
+                    <Form ref="form" className="login-form">
+                        <Form.Item style={{ display: "none" }}>
+                            {getFieldDecorator('id', { initialValue: this.state.form.id }, {
+                                rules: [{ required: true, message: 'Please input your username!' }],
+                            })}
+                        </Form.Item>
+                        <Form.Item>
+                            {getFieldDecorator('username', { initialValue: this.state.form.username }, {
+                                rules: [{ required: true, message: 'Please input your username!' }],
+                            })(
+                                <Input
+                                    prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                    placeholder="Username"
+                                />,
+                            )}
+                        </Form.Item>
+                        <Form.Item>
+                            {getFieldDecorator('password', { initialValue: this.state.form.password }, {
+                                rules: [{ required: true, message: 'Please input your Password!' }],
+                            })(
+                                <Input
+                                    prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                    placeholder="Password"
+                                />,
+                            )}
+                        </Form.Item>
+                    </Form>
+                </Modal>
+            </div>
+        )
+    }
+
 }
 
 export default Form.create()(Demo1);
