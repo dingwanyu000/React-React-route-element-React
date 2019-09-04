@@ -1,7 +1,7 @@
 import React from 'react'
 // import 'element-theme-default'
 import { Row, Col, Form, Icon, Input, Button, Card, Message } from 'antd'
-import Background from './../static/img/Background.png';
+import Background from '@/static/img/Background.png';
 import _ from 'lodash';
 
 function hasErrors(fieldsError) {

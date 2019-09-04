@@ -57,7 +57,8 @@ export default class Demo3 extends React.Component {
                     data: [
                         { name: 'Afghanistan', value: 228397.812 },
                         { name: 'Angola', value: 19549.124 },
-                        { name: 'China', value: 129549.124 }
+                        { name: 'China', value: 129549.124 },
+                        { name: 'United States', value: 829549.124 }
                     ]
                 }
             ]
@@ -91,7 +92,7 @@ export default class Demo3 extends React.Component {
                 </Row>
                 <Row style={{ marginTop: "10px" }}>
                     <Card className="box-card">
-                        <div ref="myEchart" style={{ height: "470px" }}></div>
+                        <div ref="myEchart" style={{ height: "460px" }}></div>
                     </Card>
                 </Row>
             </div>

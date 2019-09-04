@@ -1,5 +1,6 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
+const resolve = dir => path.resolve(__dirname, dir);
 module.exports = {
     entry: ['webpack/hot/dev-server', path.resolve(__dirname, './src/main.js')],
     output: {
@@ -37,6 +38,12 @@ module.exports = {
                 loader: 'file-loader'
             }
         ],
+    },
+    resolve: {
+        extensions: ['.js', '.jsx', '.json', '.scss', '.css'],
+        alias: {
+            '@': resolve('src'),
+        }
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin()

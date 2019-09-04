@@ -1,11 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Row, Col, Menu, Icon, Breadcrumb } from 'antd'
-import Demo1 from './Demo1';
-import Demo2 from './Demo2';
-import Demo3 from './Demo3';
-import { post, get } from './../api/Api'
-import 'element-theme-default'
+import Demo1 from '@/view/Demo1';
+import Demo2 from '@/view/Demo2';
+import Demo3 from '@/view/Demo3';
+import { post, get } from '@/api/Api'
 const { SubMenu } = Menu;
 
 window.$post = post

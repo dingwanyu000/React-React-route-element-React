@@ -1,6 +1,6 @@
 import React from 'react';
-import './../css/Style.css';
-import Board from './Board';
+import '@/css/Style.css';
+import Board from '@/view/Board';
 
 export default class Demo2 extends React.Component {
     constructor(props) {

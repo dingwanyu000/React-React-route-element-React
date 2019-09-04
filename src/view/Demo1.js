@@ -1,8 +1,9 @@
 import React from 'react';
 import { MessageBox } from 'element-react'
 import { Table, Tag, Button, Modal, Form, Input, Icon, Card, message } from 'antd';
-import { apiCenter } from "./../api/Apis"
-
+import { apiCenter } from "@/api/Apis"
+import wrapAuth from "@/view/authComponent/wrapAuth"
+const AuthButton = wrapAuth(Button);
 class Demo1 extends React.Component {
     constructor(props, context) {
         super(props, context);
@@ -178,7 +179,8 @@ class Demo1 extends React.Component {
             <div>
                 <Card className="box-card">
                     <div style={{ marginBottom: "10px" }}>
-                        <Button style={{ marginLeft: "5px" }} type="primary" onClick={this.createUser.bind(this)}>新增</Button>
+                        <AuthButton auth="createUser" style={{ marginLeft: "5px" }} type="primary" onClick={this.createUser.bind(this)}>新建</AuthButton>
+                        {/* <Button style={{ marginLeft: "5px" }} type="primary" onClick={this.createUser.bind(this)}>新增</Button> */}
                         <Button style={{ marginLeft: "5px" }} type="primary" onClick={this.updateUser.bind(this)}>修改</Button>
                         <Button style={{ marginLeft: "5px" }} type="danger" onClick={this.deleteUser.bind(this)}>删除</Button>
                     </div>
