@@ -12,6 +12,7 @@ module.exports = {
         historyApiFallback: true,
         inline: true,
         port: 3000,
+        host: '0.0.0.0',
         proxy: {
             "/api": {
                 target: "http://172.18.73.107:8080", // 域名

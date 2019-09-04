@@ -1,12 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { renderRoutes } from "react-route-config";
 import { Row, Col, Menu, Icon, Breadcrumb } from 'antd'
 import Demo1 from '@/view/Demo1';
 import Demo2 from '@/view/Demo2';
 import Demo3 from '@/view/Demo3';
 import { post, get } from '@/api/Api'
 const { SubMenu } = Menu;
-
+const routes = [
+    ...require('./../router/router')
+]
 window.$post = post
 window.$get = get
 export default class App extends React.Component {
@@ -18,7 +21,7 @@ export default class App extends React.Component {
     }
     componentWillMount() {
         this.setState({ username: JSON.parse(window.sessionStorage.getItem("userInfo")).username })
-        this.props.history.push('/home/Demo1')
+        this.props.history.push('/home/Demo3')
     }
     menuSelect(e) {
         this.props.history.push('/home/' + e.key)
@@ -43,7 +46,7 @@ export default class App extends React.Component {
                 </Row>
                 <Row>
                     <Col span={3}>
-                        <Menu defaultOpenKeys={['1']} defaultSelectedKeys={['Demo1']} mode="inline" ref="menu" style={{ height: window.window.innerHeight - 60 }} className="el-menu-vertical-demo" onClick={this.menuSelect.bind(this)}>
+                        <Menu defaultOpenKeys={['1']} defaultSelectedKeys={['Demo3']} mode="inline" ref="menu" style={{ height: window.window.innerHeight - 60 }} className="el-menu-vertical-demo" onClick={this.menuSelect.bind(this)}>
                             <SubMenu key="1" title={<span><i className="el-icon-message"></i>用户管理</span>}>
                                 <Menu.Item key="Demo1">用户信息管理</Menu.Item>
                                 <Menu.Item key="Demo2">Demo2</Menu.Item>
@@ -67,9 +70,9 @@ export default class App extends React.Component {
                             </Breadcrumb>
                             <Row>
                                 <Switch>
-                                    <Route path="/home/Demo1" component={Demo1} />
-                                    <Route path="/home/Demo2" component={Demo2} />
-                                    <Route path="/home/Demo3" component={Demo3} />
+                                    {routes.map((e) => {
+                                        return <Route path={e.path} component={e.component} />
+                                    })}
                                 </Switch>
                             </Row>
                         </div>
